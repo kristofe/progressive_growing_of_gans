@@ -49,6 +49,8 @@ class TFRecordDataset:
         self.shape              = []        # [channel, height, width]
         self.dtype              = 'uint8'
         self.dynamic_range      = [0, 255]
+        #self.dtype              = 'float32'
+        #self.dynamic_range      = [0, 1]
         self.label_file         = label_file
         self.label_size         = None      # [component]
         self.label_dtype        = None
