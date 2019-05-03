@@ -621,6 +621,15 @@ def create_from_images(tfrecord_dir, image_dir, shuffle):
                 img = img.transpose(2, 0, 1) # HWC => CHW
             tfr.add_image(img)
 
+def normalize01(data):
+  data_max = data.max()
+  data_min = data.min()
+  diff = data_max - data_min
+  if diff > 0.0:
+      data = np.subtract(data, data_min)
+      data = np.divide(data, data_max - data_min)
+  return data
+
 import png
 def read_uint16_png(filepath):
     with open(filepath, 'rb') as f:
@@ -628,7 +637,7 @@ def read_uint16_png(filepath):
         _, _, pngdata, _ = reader.asDirect()
         pixels_float = np.vstack(pngdata).astype(np.float32)
         #print("pixels float max {:f} min {:f}".format(np.amax(pilimg), np.amin(pilimg)))
-        pilimg =  PIL.Image.fromarray(pixels_float, "F")
+        pilimg =  PIL.Image.fromarray(normalize01(pixels_float), "F")
         return pilimg
 
 def create_from_images16(tfrecord_dir, image_dir, shuffle):
